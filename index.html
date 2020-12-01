@@ -13,13 +13,13 @@
       };
 
       client.onmessage = ( event ) => {
-        const { type, msg } = JSON.parse( event.data );
+        const { type, payload } = JSON.parse( event.data );
         const handler = handlers[ type ];
-        handler( msg );
+        handler( payload );
       }
 
-      function handleLineUpdate( place ) {
-        $placeNum.innerHTML = place;
+      function handleLineUpdate( payload ) {
+        $placeNum.innerHTML = payload.place;
       }
 
     });

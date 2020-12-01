@@ -33,7 +33,7 @@ server.on( 'upgrade', ( req, socket, head ) => {
 });
 
 function sendLinePlace( socket, place ) {
-  const msg = createMessage( 'line-update', place );
+  const msg = createMessage( 'line-update', { place } );
   socket.send( msg );
 }
 
@@ -53,9 +53,9 @@ function sendPlaceUpdate( closedSocket, server ) {
   });
 }
 
-function createMessage( type, msg ) {
+function createMessage( type, payload ) {
   return JSON.stringify({
     type,
-    msg
+    payload
   })
 }
