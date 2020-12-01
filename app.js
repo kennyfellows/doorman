@@ -1,8 +1,15 @@
-const express = require('express');
-const ws      = require('ws');
+const express  = require('express');
+const ws       = require('ws');
+const fs       = require('fs');
+const path     = require('path');
 
 const app      = express();
 const wsServer = new ws.Server({ noServer: true });
+
+app.get( '/', ( req, res ) => {
+  const filePath = path.join( __dirname, 'index.html' );
+  res.sendFile( filePath );
+});
 
 wsServer.on( 'connection', socket => {
   socket.on( 'message', console.log );
