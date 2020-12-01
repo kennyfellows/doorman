@@ -7,9 +7,13 @@
     const client = new WebSocket('ws://localhost:3000');
 
     document.addEventListener( 'DOMContentLoaded', () => {
-      const $placeNum = document.getElementById('placeNum');
+      const $placeNum  = document.getElementById('placeNum');
+      const $button    = document.getElementById('enterStore');
+      const $storeLink = document.getElementById('storeLink');
+
       const handlers = {
-        'line-update': handleLineUpdate
+        'line-update': handleLineUpdate,
+        'access-granted': handleAccessGranted
       };
 
       client.onmessage = ( event ) => {
@@ -22,6 +26,14 @@
         $placeNum.innerHTML = payload.place;
       }
 
+      function handleAccessGranted( payload ) {
+        const prevLink = $storeLink.href;
+        const newLink  = `${ prevLink }?jwt=${ payload.jwt }`;
+
+        $storeLink.href  = newLink;
+        $button.disabled = false;
+      }
+
     });
 
   </script>
@@ -30,5 +42,10 @@
   <h1>Welcome to the waiting room</h1>
 
   <p>Your place in line: <span id="placeNum"></span></p>
+
+  <a id="storeLink" href="http://localhost:3000/store">
+    <button id="enterStore" disabled>Enter the Store</button>
+  </a>
+
 </body>
 </html>
