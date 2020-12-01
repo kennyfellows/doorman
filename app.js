@@ -8,6 +8,7 @@ const wsServer = new ws.Server({ noServer: true });
 
 app.get( '/', ( req, res ) => {
   const filePath = path.join( __dirname, 'index.html' );
+  console.log('foo');
   res.sendFile( filePath );
 });
 
