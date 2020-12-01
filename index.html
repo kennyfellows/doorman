@@ -6,10 +6,6 @@
   <script type="text/javascript">
     const client = new WebSocket('ws://localhost:3000');
 
-    client.onopen = () => {
-      client.send('hello there, server');
-    }
-
     document.addEventListener( 'DOMContentLoaded', () => {
       const msgDiv   = document.getElementById('placeNum');
       const handlers = {
