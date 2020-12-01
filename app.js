@@ -1,15 +1,22 @@
-const express  = require('express');
-const ws       = require('ws');
-const fs       = require('fs');
-const path     = require('path');
+const express = require('express');
+const ws      = require('ws');
+const fs      = require('fs');
+const path    = require('path');
+const uuid    = require('uuid');
 
-const app      = express();
+const SECRET = uuid.v4();
+const app    = express();
+
 const wsServer = new ws.Server({ noServer: true });
-
 const queue    = new Map();
 
 app.get( '/', ( req, res ) => {
-  const filePath = path.join( __dirname, 'index.html' );
+  const filePath = path.join( __dirname, 'public/index.html' );
+  res.sendFile( filePath );
+});
+
+app.get( '/store', verifyJWT, ( req, res ) => {
+  const filePath = path.join( __dirname, 'public/store.html' );
   res.sendFile( filePath );
 });
 
@@ -58,4 +65,24 @@ function createMessage( type, payload ) {
     type,
     payload
   })
+}
+
+async function verifyJWT( req, res, next ) {
+
+  try {
+
+    const token    = req.cookies.jwt;
+    const verified = await jwt.verify( token, SECRET );
+    const payload  = await jwt.decode( token );
+
+    req.body.user_id = payload.user_id;
+
+    next();
+
+  } catch ( e ) {
+
+    return res.status( 401 ).send('Unauthorized');
+
+  }
+
 }
