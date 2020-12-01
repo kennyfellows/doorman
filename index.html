@@ -7,7 +7,7 @@
     const client = new WebSocket('ws://localhost:3000');
 
     document.addEventListener( 'DOMContentLoaded', () => {
-      const msgDiv   = document.getElementById('placeNum');
+      const $placeNum = document.getElementById('placeNum');
       const handlers = {
         'line-update': handleLineUpdate
       };
@@ -19,7 +19,7 @@
       }
 
       function handleLineUpdate( place ) {
-        msgDiv.innerHTML = place;
+        $placeNum.innerHTML = place;
       }
 
     });
