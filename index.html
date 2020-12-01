@@ -11,12 +11,21 @@
     }
 
     document.addEventListener( 'DOMContentLoaded', () => {
-      const msgDiv = document.getElementById('messages');
+      const msgDiv   = document.getElementById('placeNum');
+      const handlers = {
+        'line-update': handleLineUpdate
+      };
 
       client.onmessage = ( event ) => {
-        const msg = `<p>${ event.data }</p>`;
-        msgDiv.innerHTML += msg;
+        const { type, msg } = JSON.parse( event.data );
+        const handler = handlers[ type ];
+        handler( msg );
       }
+
+      function handleLineUpdate( place ) {
+        msgDiv.innerHTML = place;
+      }
+
     });
 
   </script>
@@ -24,6 +33,6 @@
 <body>
   <h1>Welcome to the waiting room</h1>
 
-  <div id="messages"></div>
+  <p>Your place in line: <span id="placeNum"></span></p>
 </body>
 </html>

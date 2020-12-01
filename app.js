@@ -33,7 +33,7 @@ server.on( 'upgrade', ( req, socket, head ) => {
 });
 
 function sendLinePlace( socket, place ) {
-  const msg = `${ place } people are ahead of you in line`;
+  const msg = createMessage( 'line-update', place );
   socket.send( msg );
 }
 
@@ -51,4 +51,11 @@ function sendPlaceUpdate( closedSocket, server ) {
 
     queue.delete( closedSocket );
   });
+}
+
+function createMessage( type, msg ) {
+  return JSON.stringify({
+    type,
+    msg
+  })
 }
