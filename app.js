@@ -15,8 +15,6 @@ const jwtWhitelist = {};
 
 let queue = [];
 
-app.use( reqIp.mw() );
-
 app.get( '/', ( req, res ) => {
   const filePath = path.join( __dirname, 'public/index.html' );
   res.sendFile( filePath );
@@ -29,9 +27,7 @@ app.get( '/store', verifyJWT, ( req, res ) => {
 
 wsServer.on( 'connection', socket => {
   queue.push( socket );
-  socket.on( 'close', () => {
-    removeFromQueue( socket );
-  });
+  socket.on( 'close', () => removeFromQueue( socket ) );
   sendLinePlace( socket, queue.length - 1 );
 });
 
