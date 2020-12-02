@@ -4,7 +4,6 @@ const fs      = require('fs');
 const path    = require('path');
 const uuid    = require('uuid');
 const jwt     = require('jsonwebtoken');
-const reqIp   = require('request-ip');
 
 const SECRET = uuid.v4();
 const app    = express();
