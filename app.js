@@ -4,6 +4,7 @@ const fs      = require('fs');
 const path    = require('path');
 const uuid    = require('uuid');
 const jwt     = require('jsonwebtoken');
+const reqIp   = require('request-ip');
 
 const SECRET = uuid.v4();
 const app    = express();
@@ -12,7 +13,9 @@ const wsServer = new ws.Server({ noServer: true, clientTracking: false });
 
 const jwtWhitelist = {};
 
-let queue      = [];
+let queue = [];
+
+app.use( reqIp.mw() );
 
 app.get( '/', ( req, res ) => {
   const filePath = path.join( __dirname, 'public/index.html' );
@@ -22,10 +25,6 @@ app.get( '/', ( req, res ) => {
 app.get( '/store', verifyJWT, ( req, res ) => {
   const filePath = path.join( __dirname, 'public/store.html' );
   res.sendFile( filePath );
-});
-
-app.get( '/doorman/:num', ( req, res ) => {
-  grantAccess( req.params.num );
 });
 
 wsServer.on( 'connection', socket => {
@@ -88,6 +87,7 @@ async function verifyJWT( req, res, next ) {
     }
 
     const verified = await jwt.verify( token, SECRET );
+    // not currently doing anything with the jwt
     const payload  = await jwt.decode( token );
 
     delete jwtWhitelist[ token ];
